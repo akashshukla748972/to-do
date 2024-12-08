@@ -1,7 +1,9 @@
-const deleteItem = (index) => {
+const deleteItem = (items) => {
+  //   alert(items);
+  //   console.log(items);
   const getItems = JSON.parse(localStorage.getItem("todoList"));
   const newData = Object.values(getItems);
-  const newItems = newData.filter((item, i) => index != i);
+  const newItems = newData.filter((item, i) => items != item);
   localStorage.setItem("todoList", JSON.stringify(newItems));
 
   getAllItems();
@@ -45,7 +47,7 @@ const setDataInItemBody = (items) => {
     const li = document.createElement("li");
     li.className =
       "px-5 py-2 text-xl bg-blue-50 hover:bg-blue-100 shadow-lg border-b-2 flex justify-between";
-    li.innerHTML = `<p class="text-zinc-600">${item}</p> <div class="flex gap-4"> <span id="show" class="" ><img src="./assest/eye-line.svg" alt="" onclick="showItem(${index})" class="w-[20px]" /></span> <span id="edit" class="" ><img src="./assest/edit-line.svg" alt="" onclick="editItem(${index})"   class="w-[20px]" /></span> <span id="delete" class="" ><img src="./assest/delete-bin-line.svg" alt="" onclick="deleteItem(${index})" class="w-[20px]" /></span> </div>`;
+    li.innerHTML = `<p class="text-zinc-600">${item}</p> <div class="flex gap-4"> <span id="show" class="" ><img src="./assest/eye-line.svg" alt="" onclick="showItem(${index})" class="w-[20px]" /></span> <span id="edit" class="" ><img src="./assest/edit-line.svg" alt="" onclick="editItem(${index})"   class="w-[20px]" /></span> <span id="delete" class="" ><img src="./assest/delete-bin-line.svg" alt="" onclick="deleteItem('${item}')" class="w-[20px]" /></span> </div>`;
 
     body.appendChild(li);
   });
