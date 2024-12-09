@@ -1,12 +1,34 @@
-const deleteItem = (items) => {
-  //   alert(items);
-  //   console.log(items);
-  const getItems = JSON.parse(localStorage.getItem("todoList"));
-  const newData = Object.values(getItems);
-  const newItems = newData.filter((item, i) => items != item);
-  localStorage.setItem("todoList", JSON.stringify(newItems));
+const deleteItem = async (items) => {
+  const response = await swalConfirm();
+  if (response) {
+    const getItems = JSON.parse(localStorage.getItem("todoList"));
+    const newData = Object.values(getItems);
+    const newItems = newData.filter((item, i) => items != item);
+    localStorage.setItem("todoList", JSON.stringify(newItems));
 
-  getAllItems();
+    getAllItems();
+  }
+  return;
+};
+
+const swalConfirm = async () => {
+  const c = await Swal.fire({
+    title: "Delete",
+    text: "Do you want to delete task?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "rgb(228, 149, 1)",
+    cancelButtonColor: "rgb(2, 126, 108)",
+    confirmButtonText: "Delete",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      swal("Task deleted successfully..", "success");
+
+      return true;
+    }
+    return false;
+  });
+  return c;
 };
 
 const swal = (text, type) => {
@@ -28,7 +50,6 @@ const swal = (text, type) => {
 };
 
 const editItem = (index) => {
-  alert(index);
   const getItems = JSON.parse(localStorage.getItem("todoList"));
   const newData = Object.values(getItems);
 
@@ -61,7 +82,7 @@ const setDataInItemBody = (items) => {
   if (Object.values(items).length == 0) {
     let li = document.createElement("li");
     li.className = "text-center text-zinc-400";
-    li.textContent = "Items not found...";
+    li.textContent = "Task not found...";
     body.appendChild(li);
 
     return;
@@ -93,7 +114,7 @@ const getItem = document
     const item = input.value;
 
     if (item.trim() === "") {
-      swal("Please enter a valid item!", "error");
+      swal("Please enter a valid Task!", "error");
       return;
     }
     // creating a empty erray to store itme as a array
@@ -113,7 +134,7 @@ const getItem = document
       convertArray.push(editedItem);
 
       localStorage.setItem("todoList", JSON.stringify(convertArray));
-      swal("Item updated successfully", "success");
+      swal("Task updated successfully", "success");
       const setDataInInput = (document.getElementById("item").value = "");
       const setButtonText = (document.getElementById("getItem").textContent =
         "Add Item");
@@ -125,7 +146,7 @@ const getItem = document
     if (!prevData) {
       // add data in localstorage
       localStorage.setItem("todoList", JSON.stringify(itemLists));
-      swal("Item added successfully", "success");
+      swal("Task added successfully", "success");
       const items = JSON.parse(localStorage.getItem("todoList"));
       input.value = "";
       setDataInItemBody(items);
@@ -135,13 +156,13 @@ const getItem = document
       const prevItems = JSON.parse(localStorage.getItem("todoList"));
       prevItems.push(item);
       localStorage.setItem("todoList", JSON.stringify(prevItems));
-      swal("Item added successfully", "success");
+      swal("Task added successfully", "success");
       const items = JSON.parse(localStorage.getItem("todoList"));
       input.value = "";
       setDataInItemBody(items);
     } else {
       // if item already exist
-      const info = "Already exist";
+      const info = "Task already exist";
       swal(info, "error");
       return;
     }
