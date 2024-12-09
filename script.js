@@ -28,11 +28,12 @@ const swal = (text, type) => {
 };
 
 const editItem = (index) => {
+  alert(index);
   const getItems = JSON.parse(localStorage.getItem("todoList"));
   const newData = Object.values(getItems);
 
-  const item = newData.filter((item, i) => index == i);
-  const SetItem = newData.filter((item, i) => index !== i);
+  const item = newData.filter((item, i) => index == item);
+  const SetItem = newData.filter((item, i) => index !== item);
 
   localStorage.setItem("todoList", JSON.stringify(SetItem));
 
@@ -45,8 +46,12 @@ const editItem = (index) => {
 
   getAllItems();
 };
-const showItem = (index) => {
-  alert(`Delete item at index ${index}`);
+const showItem = (item) => {
+  Swal.fire({
+    // title: "Selected Item",
+    text: item,
+    // icon: "success",
+  });
 };
 
 const setDataInItemBody = (items) => {
@@ -68,7 +73,7 @@ const setDataInItemBody = (items) => {
     const li = document.createElement("li");
     li.className =
       "px-5 py-2 text-xl bg-blue-50 hover:bg-blue-100 shadow-lg border-b-2 flex justify-between";
-    li.innerHTML = `<p class="text-zinc-600">${item}</p> <div class="flex gap-4"> <span id="show" class="" ><img src="./assest/eye-line.svg" alt="" onclick="showItem(${index})" class="w-[20px]" /></span> <span id="edit" class="" ><img src="./assest/edit-line.svg" alt="" onclick="editItem(${index})"   class="w-[20px]" /></span> <span id="delete" class="" ><img src="./assest/delete-bin-line.svg" alt="" onclick="deleteItem('${item}')" class="w-[20px]" /></span> </div>`;
+    li.innerHTML = `<p class="text-zinc-600">${item}</p> <div class="flex gap-4"> <span id="show" class="" ><img src="./assest/eye-line.svg" alt="" onclick="showItem('${item}')" class="w-[20px]" /></span> <span id="edit" class="" ><img src="./assest/edit-line.svg" alt="" onclick="editItem('${item}')"   class="w-[20px]" /></span> <span id="delete" class="" ><img src="./assest/delete-bin-line.svg" alt="" onclick="deleteItem('${item}')" class="w-[20px]" /></span> </div>`;
 
     body.appendChild(li);
   });
