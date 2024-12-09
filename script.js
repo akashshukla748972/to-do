@@ -8,6 +8,25 @@ const deleteItem = (items) => {
 
   getAllItems();
 };
+
+const swal = (text, type) => {
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    },
+  });
+  Toast.fire({
+    icon: type,
+    title: text,
+  });
+};
+
 const editItem = (index) => {
   const getItems = JSON.parse(localStorage.getItem("todoList"));
   const newData = Object.values(getItems);
@@ -29,6 +48,7 @@ const editItem = (index) => {
 const showItem = (index) => {
   alert(`Delete item at index ${index}`);
 };
+
 const setDataInItemBody = (items) => {
   const body = document.getElementById("item-body");
   body.innerHTML = "";
@@ -38,6 +58,7 @@ const setDataInItemBody = (items) => {
     li.className = "text-center text-zinc-400";
     li.textContent = "Items not found...";
     body.appendChild(li);
+
     return;
   }
 
@@ -67,7 +88,7 @@ const getItem = document
     const item = input.value;
 
     if (item.trim() === "") {
-      alert("Please enter a valid item!");
+      swal("Please enter a valid item!", "error");
       return;
     }
     // creating a empty erray to store itme as a array
@@ -87,6 +108,7 @@ const getItem = document
       convertArray.push(editedItem);
 
       localStorage.setItem("todoList", JSON.stringify(convertArray));
+      swal("Item updated successfully", "success");
       const setDataInInput = (document.getElementById("item").value = "");
       const setButtonText = (document.getElementById("getItem").textContent =
         "Add Item");
@@ -98,6 +120,7 @@ const getItem = document
     if (!prevData) {
       // add data in localstorage
       localStorage.setItem("todoList", JSON.stringify(itemLists));
+      swal("Item added successfully", "success");
       const items = JSON.parse(localStorage.getItem("todoList"));
       input.value = "";
       setDataInItemBody(items);
@@ -107,13 +130,14 @@ const getItem = document
       const prevItems = JSON.parse(localStorage.getItem("todoList"));
       prevItems.push(item);
       localStorage.setItem("todoList", JSON.stringify(prevItems));
+      swal("Item added successfully", "success");
       const items = JSON.parse(localStorage.getItem("todoList"));
       input.value = "";
       setDataInItemBody(items);
     } else {
       // if item already exist
       const info = "Already exist";
-      alert(info);
+      swal(info, "error");
       return;
     }
   });
